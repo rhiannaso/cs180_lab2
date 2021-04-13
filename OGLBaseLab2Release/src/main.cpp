@@ -35,6 +35,18 @@ static const GLfloat g_vertex_buffer_data[] = {
 		0.9f, 0.9f, 0.0f
 	};
 
+static const GLfloat g_color_buffer_data[] = {
+		0.2f, 0.92f, 0.9f,
+		0.92f, 0.78f, 0.19f,
+		0.92f, 0.2f, 0.585f,
+        0.2f, 0.92f, 0.9f,
+		0.92f, 0.2f, 0.585f,
+		0.92f, 0.78f, 0.19f,
+        0.92f, 0.78f, 0.19f,
+		0.92f, 0.2f, 0.585f,
+		0.2f, 0.92f, 0.9f
+	};
+
 /* A big global wrapper for all our data */
 class Application : public EventCallbacks {
 
@@ -53,6 +65,8 @@ public:
 
 	// Data necessary to give our triangle to OpenGL
 	GLuint vertexBufferID;
+
+    GLuint colorBufferID;
 
 	/* we will work with matrices soon - don't worry - place holder for now */
 	void createIdentityMat(float *M) {
@@ -114,6 +128,7 @@ public:
 		prog->addUniform("V");
 		prog->addUniform("M");
 		prog->addAttribute("vertPos");
+        prog->addAttribute("colorPos");
 	}
 
 	void initGeom(const std::string& resourceDirectory)
@@ -128,6 +143,13 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 		//actually memcopy the data - only do this once
 		glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_DYNAMIC_DRAW);
+
+		//generate color buffer to hand off to OGL
+		glGenBuffers(1, &colorBufferID);
+		//set the current state to focus on our color buffer
+		glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+		//actually memcopy the data - only do this once
+		glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_DYNAMIC_DRAW);
 	}
 
 	void render()
@@ -164,6 +186,12 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 		//key function to get up how many elements to pull out at a time (3)
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+        //we need to set up the color array
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+		//key function to get up how many elements to pull out at a time (3)
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
 		//actually draw from vertex 0, 9 vertices
 		glDrawArrays(GL_TRIANGLES, 0, 9);
