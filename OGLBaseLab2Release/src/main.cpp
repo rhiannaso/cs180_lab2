@@ -24,9 +24,15 @@ using namespace glm;
 /* Global data associated with triangle geometry - this will likely vary
 in later programs - so is left explicit for now  */
 static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
+		-0.8f, -0.9f, 0.0f,
+		0.8f, -0.9f, 0.0f,
+		0.0f, 0.9f, 0.0f,
+        -0.9f, -0.9f, 0.0f,
+		-0.1f, 0.9f, 0.0f,
+		-0.9f, 0.9f, 0.0f,
+        0.9f, -0.9f, 0.0f,
+		0.1f, 0.9f, 0.0f,
+		0.9f, 0.9f, 0.0f
 	};
 
 /* A big global wrapper for all our data */
@@ -159,8 +165,8 @@ public:
 		//key function to get up how many elements to pull out at a time (3)
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-		//actually draw from vertex 0, 3 vertices
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//actually draw from vertex 0, 9 vertices
+		glDrawArrays(GL_TRIANGLES, 0, 9);
 		glDisableVertexAttribArray(0);
 
 		prog->unbind();
